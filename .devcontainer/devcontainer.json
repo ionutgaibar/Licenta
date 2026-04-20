@@ -1,0 +1,17 @@
+{
+    "name": "Licenta",
+    "image": "mcr.microsoft.com/devcontainers/python:3.12",
+    
+    // Instalează automat librăriile la pornire
+    "postCreateCommand": "pip install -r requirements.txt",
+
+    // Configurează extensiile de care ai nevoie în interiorul containerului
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance"
+            ]
+        }
+    }
+}
