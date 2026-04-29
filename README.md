@@ -32,7 +32,7 @@ Am evaluat modelele folosind o tăietură cronologică fixă (**Train: 1993-2017
 * **Early Stopping**: Utilizarea setului de validare a prevenit XGBoost să memoreze zgomotul, oprindu-se la momentul optim (arborele nr. 2).
 
 ## Tehnologii Utilizate
-* **Python 3.x**
+* **Python 3.12
 * **Pandas & NumPy**: Manipularea datelor.
 * **Pandas_TA**: Analiză tehnică.
 * **Scikit-Learn**: Scalare, Regresie Logistică, SVM și metrici.
