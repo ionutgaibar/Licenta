@@ -1,3 +1,4 @@
+# data_loader.py
 import os  # Importă modulul 'os' folosit pentru a interacționa cu sistemul de operare (pentru a verifica și crea directoare/căi).
 import yfinance as yf  # Importă biblioteca 'yfinance' și îi atribuie aliasul 'yf', folosită pentru a extrage date de la Yahoo Finance.
 

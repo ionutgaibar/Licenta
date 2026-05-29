@@ -1,3 +1,4 @@
+# xgboost.py
 import os  # Importă modulul 'os' pentru operațiuni la nivel de sistem (ex: gestionarea căilor și directoarelor).
 import pandas as pd  # Importă biblioteca 'pandas' cu aliasul 'pd', esențială pentru încărcarea și prelucrarea datelor tabelare.
 import joblib  # Importă 'joblib', un utilitar folosit pentru a salva și încărca modele Python complexe (cum ar fi cele de ML) direct pe disc.
@@ -5,14 +6,14 @@ import xgboost as xgb  # Importă biblioteca 'xgboost' sub aliasul 'xgb', un alg
 from sklearn.metrics import (accuracy_score, precision_score, recall_score,  # Importă din scikit-learn funcțiile matematice pentru evaluarea calității modelului.
                              f1_score, roc_auc_score, confusion_matrix)
 
-def run_xgboost_pipeline(ticker: str, input_dir: str, model_dir: str, start_date: str, end_date: str):  # Definește funcția care rulează întregul proces, cerând simbolul, căile directoarelor și intervalul de date ca parametri.
+def run_xgboost_pipeline(ticker: str, processed_dir: str, model_dir: str, start_date: str, end_date: str):  # Definește funcția care rulează întregul proces, cerând simbolul, căile directoarelor și intervalul de date ca parametri.
     print(f"--- Inițiere Antrenare XGBoost pentru {ticker} ---")  # Afișează în consolă un mesaj de pornire a procesului pentru simbolul bursier curent.
 
     if not os.path.exists(model_dir):  # Verifică dacă folderul destinat salvării modelului final nu există încă.
         os.makedirs(model_dir)  # Creează automat structura de directoare necesară pentru salvarea modelului.
 
     file_name = f"{ticker}_{start_date}_to_{end_date}.csv"  # Construiește dinamic numele fișierului ce conține dataset-ul (bazându-se pe setările de generare din pașii precedenți).
-    input_file_path = os.path.join(input_dir, file_name)  # Creează calea completă către fișierul cu date prelucrate (features) concatenând folderul cu numele fișierului.
+    input_file_path = os.path.join(processed_dir, file_name)  # Creează calea completă către fișierul cu date prelucrate (features) concatenând folderul cu numele fișierului.
 
     if not os.path.exists(input_file_path):  # Validează prezența fizică a fișierului de intrare pe hard disk.
         print(f"Eroare: Nu am găsit fișierul '{file_name}'.")  # Trimite o eroare în consolă dacă dataset-ul lipsește.

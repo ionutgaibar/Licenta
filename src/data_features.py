@@ -1,23 +1,24 @@
+# data_features.py
 import os  # Importă modulul 'os' pentru interacțiunea cu sistemul de operare (ex: lucrul cu directoare și căi de fișiere).
 import pandas as pd  # Importă biblioteca 'pandas' cu aliasul 'pd', folosită pentru manipularea și analiza datelor tabelare.
 import pandas_ta as ta # Importă 'pandas_ta' (Technical Analysis) cu aliasul 'ta' pentru calculul facil al indicatorilor financiari.
 from sklearn.preprocessing import StandardScaler  # Importă clasa 'StandardScaler' din scikit-learn pentru a standardiza (scala) datele numerice.
 
-def run_features_pipeline(ticker: str, input_dir: str, output_dir: str, start_date: str, end_date: str):  # Definește funcția principală cu parametrii necesari (simbol, directoare intrare/ieșire, date de început/sfârșit).
+def run_features_pipeline(ticker: str, clean_dir: str, processed_dir: str, start_date: str, end_date: str):  # Definește funcția principală cu parametrii necesari (simbol, directoare intrare/ieșire, date de început/sfârșit).
     """
     Preia datele curățate, calculează indicatorii tehnici (features) și le salvează.  # Descrie acțiunea funcției.
     """ 
     print(f"--- Inițiere Pipeline de Feature Engineering pentru {ticker} ---")  # Afișează în consolă începutul procesului de creare a feature-urilor pentru simbolul specificat.
 
-    if not os.path.exists(output_dir):  # Verifică dacă directorul de ieșire NU există deja.
-        os.makedirs(output_dir)  # Creează directorul de ieșire (și directoarele părinte, dacă lipsesc).
-        print(f"Directorul {output_dir} a fost creat.")  # Afișează un mesaj confirmând crearea directorului.
+    if not os.path.exists(processed_dir):  # Verifică dacă directorul de ieșire NU există deja.
+        os.makedirs(processed_dir)  # Creează directorul de ieșire (și directoarele părinte, dacă lipsesc).
+        print(f"Directorul {processed_dir} a fost creat.")  # Afișează un mesaj confirmând crearea directorului.
 
     file_name = f"{ticker}_{start_date}_to_{end_date}.csv"  # Construiește numele fișierului folosind simbolul și intervalul de date.
-    input_file_path = os.path.join(input_dir, file_name)  # Construiește calea completă către fișierul de intrare combinând directorul cu numele fișierului.
+    input_file_path = os.path.join(clean_dir, file_name)  # Construiește calea completă către fișierul de intrare combinând directorul cu numele fișierului.
 
     if not os.path.exists(input_file_path):  # Verifică dacă fișierul de intrare (datele curățate) lipsește.
-        print(f"Eroare: Nu am găsit fișierul curățat '{file_name}' în '{input_dir}'.")  # Afișează o eroare dacă fișierul nu este găsit.
+        print(f"Eroare: Nu am găsit fișierul curățat '{file_name}' în '{clean_dir}'.")  # Afișează o eroare dacă fișierul nu este găsit.
         return  # Oprește execuția funcției deoarece nu avem date de procesat.
 
     try:  # Începe blocul de cod care gestionează posibilele erori de execuție.
@@ -104,7 +105,7 @@ def run_features_pipeline(ticker: str, input_dir: str, output_dir: str, start_da
         print(f"  -> Scalare finalizată pentru {len(feature_cols)} indicatori.")  # Confirmă în consolă numărul de coloane care au fost scalate.
 
         # Salvarea fișierului final
-        output_file_path = os.path.join(output_dir, file_name)  # Construiește calea completă pentru fișierul de ieșire.
+        output_file_path = os.path.join(processed_dir, file_name)  # Construiește calea completă pentru fișierul de ieșire.
         df.to_csv(output_file_path, index=False)  # Salvează DataFrame-ul final pe disc în format CSV, fără index.
 
         print(f"  -> Succes! Dataset-ul cu {len(df.columns)} coloane a fost salvat în: {output_file_path}")  # Afișează un mesaj de succes la finalizarea salvării.

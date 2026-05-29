@@ -1,3 +1,4 @@
+# svm.py
 import os  # Importă modulul 'os' pentru a interacționa cu sistemul de operare (pentru a lucra cu directoare și căi).
 import pandas as pd  # Importă biblioteca 'pandas' cu aliasul 'pd', necesară pentru încărcarea și prelucrarea datelor în format tabelar.
 import joblib  # Importă 'joblib', utilizat pentru a serializa (salva) și deserializa modelul antrenat pe disc.
@@ -5,14 +6,14 @@ from sklearn.svm import SVC  # Importă clasa 'SVC' (Support Vector Classificati
 from sklearn.metrics import (accuracy_score, precision_score, recall_score,  # Importă funcțiile pentru a calcula performanța modelului.
                              f1_score, roc_auc_score, confusion_matrix)
 
-def run_svm_pipeline(ticker: str, input_dir: str, model_dir: str, start_date: str, end_date: str):  # Definește funcția pipeline cu parametrii necesari (simbol, directoare, date).
+def run_svm_pipeline(ticker: str, processed_dir: str, model_dir: str, start_date: str, end_date: str):  # Definește funcția pipeline cu parametrii necesari (simbol, directoare, date).
     print(f"--- Inițiere Antrenare SVM pentru {ticker} ---")  # Afișează un mesaj în consolă indicând începerea antrenării modelului SVM.
 
     if not os.path.exists(model_dir):  # Verifică dacă directorul pentru salvarea modelelor nu există.
         os.makedirs(model_dir)  # Creează directorul respectiv dacă acesta lipsește.
 
     file_name = f"{ticker}_{start_date}_to_{end_date}.csv"  # Construiește numele fișierului de intrare pe baza simbolului și a perioadei.
-    input_file_path = os.path.join(input_dir, file_name)  # Combină directorul de intrare cu numele fișierului pentru a obține calea completă.
+    input_file_path = os.path.join(processed_dir, file_name)  # Combină directorul de intrare cu numele fișierului pentru a obține calea completă.
 
     if not os.path.exists(input_file_path):  # Verifică dacă fișierul de date lipsește de pe disc.
         print(f"Eroare: Nu am găsit fișierul '{file_name}'.")  # Afișează un mesaj de eroare dacă fișierul nu a fost găsit.

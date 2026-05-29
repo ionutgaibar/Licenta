@@ -1,3 +1,4 @@
+# backtester.py
 import os  # Importă modulul 'os' pentru interacțiunea cu sistemul de operare (lucrul cu fișiere și directoare).
 import pandas as pd  # Importă 'pandas' sub aliasul 'pd', pentru manipularea și analiza datelor sub formă de tabele.
 import numpy as np  # Importă 'numpy' cu aliasul 'np', utilizat pentru operațiuni matematice eficiente pe vectori și matrice.
@@ -9,24 +10,24 @@ import tensorflow as tf  # Importă 'tensorflow' sub aliasul 'tf', necesar pentr
 
 def run_backtester(  # Definește funcția principală care va simula performanța financiară a modelelor în timp.
     ticker: str,  # Parametru pentru simbolul acțiunii/activului financiar (ex: 'AAPL').
-    cleaned_dir: str,  # Parametru ce indică folderul cu datele brute curățate (pentru a prelua prețurile reale).
-    features_dir: str,  # Parametru ce indică folderul cu datele procesate (indicatorii tehnici scalați).
+    clean_dir: str,  # Parametru ce indică folderul cu datele brute curățate (pentru a prelua prețurile reale).
+    processed_dir: str,  # Parametru ce indică folderul cu datele procesate (indicatorii tehnici scalați).
     model_dir: str,  # Parametru pentru locația unde au fost salvate modelele antrenate anterior.
     start_date: str,  # Parametru pentru data de început a intervalului analizat.
     end_date: str,  # Parametru pentru data de final a intervalului analizat.
-    initial_capital: float = 10000.0  # Setează un buget de pornire standard de 10.000$ pentru simulare.
+    initial_capital: float = 1000.0  # Setează un buget de pornire standard de 1.000$ pentru simulare.
     ):
     print(f"--- Inițiere Backtesting Multi-Model pentru {ticker} ---")  # Afișează un mesaj în consolă la startul simulării.
 
     models = find_models(model_dir)  # Apelează o funcție ajutătoare (definită mai jos) pentru a găsi și încărca rutele tuturor modelelor salvate.
 
     features_file = os.path.join(  # Formează calea completă către fișierul cu feature-uri.
-        features_dir,  # Folderul sursă pentru features.
+        processed_dir,  # Folderul sursă pentru features.
         f"{ticker}_{start_date}_to_{end_date}.csv"  # Numele fișierului, construit dinamic din parametri.
     )
 
     cleaned_file = os.path.join(  # Formează calea completă către fișierul curățat.
-        cleaned_dir,  # Folderul sursă pentru datele curățate.
+        clean_dir,  # Folderul sursă pentru datele curățate.
         f"{ticker}_{start_date}_to_{end_date}.csv"  # Numele fișierului curățat.
     )
 
@@ -139,7 +140,7 @@ def run_backtester(  # Definește funcția principală care va simula performan�
 
     # 6. Afișarea Tabelului de Rezultate 
     print("\n=== REZULTATE FINANCIARE FINALE (2021+) ===")
-    results_df = pd.DataFrame(results).T  # Transpune (inverteste rândurile cu coloanele prin proprietatea .T) dicționarul într-un obiect tabelar curat.
+    results_df = pd.DataFrame(results).T  # Transpune (invarte rândurile cu coloanele prin proprietatea .T) dicționarul într-un obiect tabelar curat.
     print(results_df.to_string())  # Listează întregul tabel curat în consolă ca text frumos aliniat.
     print("===========================================\n")
 
@@ -194,7 +195,7 @@ def find_models(base_models_dir):  # Definește sub-funcția ajutătoare, cea ca
     models_dict = {}  # Stabilește variabila container goală pentru date.
 
     # Căutăm toate fișierele .joblib (ML Clasic) și .keras (Deep Learning)
-    # Recursiv (**) prin toate subfolderele  # Comentariul original referitor la scanarea în adâncime.
+    # Recursiv (**) prin toate subfolderele
     patterns = [  # Alcătuiește o mică colecție de reguli sintactice tipice pentru identificarea mașinii.
         os.path.join(base_models_dir, "**", "*.joblib"),  # Include prima regulă: orice fișier joblib în orice folder.
         os.path.join(base_models_dir, "**", "*.keras"),  # Extinde permisiunile pe fișierele cu format nou Keras.

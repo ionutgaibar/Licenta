@@ -1,5 +1,4 @@
-import os
-
+# main.py
 import config
 from src.data_loader import run_loader_pipeline
 from src.data_cleaner import run_cleaner_pipeline
@@ -24,23 +23,23 @@ run_loader_pipeline(
 run_cleaner_pipeline(
     ticker=config.TICKER,
     raw_dir=config.RAW_DATA_DIR, 
-    cleared_dir=config.CLEAN_DATA_DIR,
+    clean_dir=config.CLEAN_DATA_DIR,
     start_date=config.START_DATE,
     end_date=config.END_DATE
 )
 
 # 3. PROCESEAZA DATELE (Processor)
 run_features_pipeline(
-        ticker=config.TICKER,
-        input_dir=config.CLEAN_DATA_DIR, 
-        output_dir=config.PROCESSED_DATA_DIR,
-        start_date=config.START_DATE,
-        end_date=config.END_DATE
+    ticker=config.TICKER,
+    clean_dir=config.CLEAN_DATA_DIR, 
+    processed_dir=config.PROCESSED_DATA_DIR,
+    start_date=config.START_DATE,
+    end_date=config.END_DATE
 )
 # 4. LogReg
 run_logreg_pipeline(
     ticker=config.TICKER,
-    input_dir=config.PROCESSED_DATA_DIR, 
+    processed_dir=config.PROCESSED_DATA_DIR, 
     model_dir=config.MODELS_DIR,
     start_date=config.START_DATE,
     end_date=config.END_DATE
@@ -49,7 +48,7 @@ run_logreg_pipeline(
 # 5. XGBoost
 run_xgboost_pipeline(
     ticker=config.TICKER,
-    input_dir=config.PROCESSED_DATA_DIR, 
+    processed_dir=config.PROCESSED_DATA_DIR, 
     model_dir=config.MODELS_DIR,
     start_date=config.START_DATE,
     end_date=config.END_DATE
@@ -58,17 +57,17 @@ run_xgboost_pipeline(
 # 6. LSTM
 run_lstm_pipeline(
     ticker=config.TICKER,
-    input_dir=config.PROCESSED_DATA_DIR, 
+    processed_dir=config.PROCESSED_DATA_DIR, 
     model_dir=config.MODELS_DIR,
     start_date=config.START_DATE,
     end_date=config.END_DATE,
-    time_steps=10  # Se uită la ultimele 2 săptămâni (10 zile de tranzacționare)
+    time_steps=config.LSTM_TIME_STEPS
 )
 
 # 7. SVM
 run_svm_pipeline(
     ticker=config.TICKER,
-    input_dir=config.PROCESSED_DATA_DIR, 
+    processed_dir=config.PROCESSED_DATA_DIR, 
     model_dir=config.MODELS_DIR,
     start_date=config.START_DATE,
     end_date=config.END_DATE
@@ -77,8 +76,8 @@ run_svm_pipeline(
 #8. Backtest
 run_backtester(
     ticker=config.TICKER,
-    cleaned_dir=config.CLEAN_DATA_DIR,
-    features_dir=config.PROCESSED_DATA_DIR, 
+    clean_dir=config.CLEAN_DATA_DIR,
+    processed_dir=config.PROCESSED_DATA_DIR, 
     model_dir=config.MODELS_DIR,
     start_date=config.START_DATE,
     end_date=config.END_DATE

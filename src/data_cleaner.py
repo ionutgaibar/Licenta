@@ -1,14 +1,15 @@
+# data_cleaner.py
 import os  # Importă modulul 'os' pentru interacțiunea cu sistemul de operare (cum ar fi lucrul cu directoare și fișiere).
 import pandas as pd  # Importă biblioteca 'pandas' sub aliasul 'pd', folosită pentru procesarea și manipularea datelor.
 
-def run_cleaner_pipeline(ticker: str, raw_dir: str, cleared_dir: str, start_date: str, end_date: str):  # Definește funcția de curățare, specificând tipurile parametrilor așteptați (simbol, directoare, date).
+def run_cleaner_pipeline(ticker: str, raw_dir: str, clean_dir: str, start_date: str, end_date: str):  # Definește funcția de curățare, specificând tipurile parametrilor așteptați (simbol, directoare, date).
     """
     Caută un fișier specific în raw_dir pe baza parametrilor, îl curăță și îl salvează.
 
     Args:
         ticker (str): Simbolul bursier (ex: 'AAPL').
         raw_dir (str): Directorul sursă (raw data).
-        cleared_dir (str): Directorul destinație (cleared data).
+        clean_dir (str): Directorul destinație (cleaned data).
         start_date (str): Data de început format 'YYYY-MM-DD'.
         end_date (str): Data de sfârșit format 'YYYY-MM-DD'.
     """
@@ -16,9 +17,9 @@ def run_cleaner_pipeline(ticker: str, raw_dir: str, cleared_dir: str, start_date
     print(f"--- Inițiere Pipeline de Curățare pentru {ticker} ---")  # Afișează în consolă un mesaj care semnalizează începerea procesului pentru simbolul curent.
 
     # 1. Asigurarea existenței directorului destinație
-    if not os.path.exists(cleared_dir):  # Verifică dacă directorul unde trebuie salvate fișierele curățate NU există.
-        os.makedirs(cleared_dir)  # Dacă nu există, creează directorul destinație (inclusiv pe cele părinte, dacă e necesar).
-        print(f"Directorul {cleared_dir} a fost creat.")  # Informează utilizatorul că directorul a fost creat cu succes.
+    if not os.path.exists(clean_dir):  # Verifică dacă directorul unde trebuie salvate fișierele curățate NU există.
+        os.makedirs(clean_dir)  # Dacă nu există, creează directorul destinație (inclusiv pe cele părinte, dacă e necesar).
+        print(f"Directorul {clean_dir} a fost creat.")  # Informează utilizatorul că directorul a fost creat cu succes.
 
     # 2. Reconstruirea numelui exact al fișierului
     file_name = f"{ticker}_{start_date}_to_{end_date}.csv"  # Generează numele fișierului folosind același format (simbol + date) ca în pipeline-ul de descărcare.
@@ -45,10 +46,10 @@ def run_cleaner_pipeline(ticker: str, raw_dir: str, cleared_dir: str, start_date
             df['Date'] = pd.to_datetime(df['Date'], utc=True).dt.strftime('%Y-%m-%d')  # Convertește coloana 'Date' într-un obiect datetime (formatând-o UTC) și extrage doar șirul de caractere an-lună-zi.
 
         # 4. Salvarea fișierului curățat
-        cleared_file_path = os.path.join(cleared_dir, file_name)  # Formează calea completă unde va fi salvat noul fișier curățat (director destinație + nume fișier).
-        df.to_csv(cleared_file_path, index=False)  # Salvează DataFrame-ul procesat înapoi pe disc ca CSV, fără a adăuga coloana cu indexul numeric rândurilor.
+        clean_file_path = os.path.join(clean_dir, file_name)  # Formează calea completă unde va fi salvat noul fișier curățat (director destinație + nume fișier).
+        df.to_csv(clean_file_path, index=False)  # Salvează DataFrame-ul procesat înapoi pe disc ca CSV, fără a adăuga coloana cu indexul numeric rândurilor.
 
-        print(f"  -> Succes! Fișierul curățat a fost salvat în: {cleared_file_path}")  # Afișează un mesaj de confirmare după ce fișierul a fost scris cu succes.
+        print(f"  -> Succes! Fișierul curățat a fost salvat în: {clean_file_path}")  # Afișează un mesaj de confirmare după ce fișierul a fost scris cu succes.
 
     except Exception as e:  # Dacă apare orice eroare în blocul 'try' (ex: fișier corupt, permisiuni), este capturată aici în variabila 'e'.
         print(f"  -> Eroare la procesarea fișierului {file_name}: {e}")  # Afișează mesajul de eroare specific pentru a ajuta la depanare.

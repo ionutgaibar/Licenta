@@ -1,3 +1,4 @@
+# lstm.py
 import os  # Importă modulul 'os' pentru a interacționa cu sistemul de operare (verificare și creare de directoare).
 import numpy as np  # Importă 'numpy' cu aliasul 'np', biblioteca standard pentru calcule numerice și manipularea array-urilor multidimensionale.
 import pandas as pd  # Importă 'pandas' cu aliasul 'pd', esențială pentru încărcarea, procesarea și analiza datelor tabelare (DataFrames).
@@ -19,14 +20,14 @@ def create_sequences(X, y, time_steps):  # Definește o funcție ajutătoare car
         ys.append(y.iloc[i + time_steps])  # Extrage răspunsul corect (creștere/scădere) aferent zilei imediat următoare calupului de mai sus și îl salvează în ys.
     return np.array(Xs), np.array(ys)  # Transformă listele standard din Python în array-uri NumPy extrem de optimizate, pregătite pentru TensorFlow, și le returnează.
 
-def run_lstm_pipeline(ticker: str, input_dir: str, model_dir: str, start_date: str, end_date: str, time_steps: int = 10):  # Definește funcția principală, setând implicit 'time_steps' la 10 zile (memoria LSTM-ului).
+def run_lstm_pipeline(ticker: str, processed_dir: str, model_dir: str, start_date: str, end_date: str, time_steps: int = 10):  # Definește funcția principală, setând implicit 'time_steps' la 10 zile (memoria LSTM-ului).
     print(f"--- Inițiere Antrenare LSTM pentru {ticker} ---")  # Printează în consolă mesajul care marchează începutul procesului pentru simbolul curent.
 
     if not os.path.exists(model_dir):  # Verifică dacă folderul destinat salvării modelului Keras formatat .keras NU există.
         os.makedirs(model_dir)  # Creează structura de foldere necesară pe disc.
 
     file_name = f"{ticker}_{start_date}_to_{end_date}.csv"  # Construiește dinamic numele fișierului de unde vor fi citite feature-urile.
-    input_file_path = os.path.join(input_dir, file_name)  # Creează calea completă, îmbinând numele folderului sursă cu fișierul.
+    input_file_path = os.path.join(processed_dir, file_name)  # Creează calea completă, îmbinând numele folderului sursă cu fișierul.
 
     if not os.path.exists(input_file_path):  # Validează prezența datelor de intrare pe unitatea de stocare.
         print(f"Eroare: Nu am găsit fișierul '{file_name}'.")  # Informează utilizatorul despre lipsa datelor.
