@@ -6,7 +6,7 @@ from sklearn.linear_model import LogisticRegression  # Importă algoritmul de Re
 from sklearn.metrics import (accuracy_score, precision_score, recall_score,  # Importă metricile necesare pentru evaluarea detaliată a performanței modelului.
                              f1_score, roc_auc_score, confusion_matrix)
 
-def run_logreg_pipeline(ticker: str, processed_dir: str, model_dir: str, start_date: str, end_date: str):  # Definește funcția pipeline cu parametrii de configurare necesari, specificând tipurile de date.
+def run_logreg_pipeline(ticker: str, scaled_dir: str, model_dir: str, start_date: str, end_date: str):  # Definește funcția pipeline cu parametrii de configurare necesari, specificând tipurile de date.
     """
     Antrenează un model de Regresie Logistică folosind o împărțire cronologică a datelor.  # Explică scopul principal: antrenarea unui clasificator pe o serie de timp.
     """
@@ -16,7 +16,7 @@ def run_logreg_pipeline(ticker: str, processed_dir: str, model_dir: str, start_d
         os.makedirs(model_dir)  # Creează directorul pentru model (și orice directoare părinte necesare) dacă acesta nu a fost găsit.
 
     file_name = f"{ticker}_{start_date}_to_{end_date}.csv"  # Construiește dinamic numele fișierului de intrare, menținând convenția de denumire stabilită în pașii anteriori.
-    input_file_path = os.path.join(processed_dir, file_name)  # Formează calea absolută sau relativă completă către fișierul CSV cu feature-urile deja procesate.
+    input_file_path = os.path.join(scaled_dir, file_name)  # Formează calea absolută sau relativă completă către fișierul CSV cu feature-urile deja procesate.
 
     if not os.path.exists(input_file_path):  # Validează existența fișierului de intrare generat de pipeline-ul anterior (feature engineering).
         print(f"Eroare: Nu am găsit fișierul cu features '{file_name}'.")  # Informează utilizatorul că procesul nu poate continua din lipsa datelor.

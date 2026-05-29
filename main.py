@@ -3,6 +3,7 @@ import config
 from src.data_loader import run_loader_pipeline
 from src.data_cleaner import run_cleaner_pipeline
 from src.data_features import run_features_pipeline
+from src.data_scaler import run_scaler_pipeline
 from models.logreg import run_logreg_pipeline
 from models.xgboost import run_xgboost_pipeline
 from models.lstm import run_lstm_pipeline
@@ -36,10 +37,20 @@ run_features_pipeline(
     start_date=config.START_DATE,
     end_date=config.END_DATE
 )
+# 4. SCALEAZA DATELE (Scaler)
+run_scaler_pipeline(
+    ticker=config.TICKER,
+    processed_dir=config.PROCESSED_DATA_DIR,
+    scaled_dir=config.SCALED_DATA_DIR,
+    model_dir=config.MODELS_DIR,
+    start_date=config.START_DATE,
+    end_date=config.END_DATE
+)
+
 # 4. LogReg
 run_logreg_pipeline(
     ticker=config.TICKER,
-    processed_dir=config.PROCESSED_DATA_DIR, 
+    scaled_dir=config.SCALED_DATA_DIR, 
     model_dir=config.MODELS_DIR,
     start_date=config.START_DATE,
     end_date=config.END_DATE
@@ -48,7 +59,7 @@ run_logreg_pipeline(
 # 5. XGBoost
 run_xgboost_pipeline(
     ticker=config.TICKER,
-    processed_dir=config.PROCESSED_DATA_DIR, 
+    scaled_dir=config.SCALED_DATA_DIR, 
     model_dir=config.MODELS_DIR,
     start_date=config.START_DATE,
     end_date=config.END_DATE
@@ -57,7 +68,7 @@ run_xgboost_pipeline(
 # 6. LSTM
 run_lstm_pipeline(
     ticker=config.TICKER,
-    processed_dir=config.PROCESSED_DATA_DIR, 
+    scaled_dir=config.SCALED_DATA_DIR, 
     model_dir=config.MODELS_DIR,
     start_date=config.START_DATE,
     end_date=config.END_DATE,
@@ -67,7 +78,7 @@ run_lstm_pipeline(
 # 7. SVM
 run_svm_pipeline(
     ticker=config.TICKER,
-    processed_dir=config.PROCESSED_DATA_DIR, 
+    scaled_dir=config.SCALED_DATA_DIR, 
     model_dir=config.MODELS_DIR,
     start_date=config.START_DATE,
     end_date=config.END_DATE
@@ -77,7 +88,7 @@ run_svm_pipeline(
 run_backtester(
     ticker=config.TICKER,
     clean_dir=config.CLEAN_DATA_DIR,
-    processed_dir=config.PROCESSED_DATA_DIR, 
+    scaled_dir=config.SCALED_DATA_DIR, 
     model_dir=config.MODELS_DIR,
     start_date=config.START_DATE,
     end_date=config.END_DATE

@@ -2,6 +2,7 @@
 import os  # Importă modulul 'os' pentru interacțiunea cu sistemul de operare (ex: lucrul cu directoare și căi de fișiere).
 import pandas as pd  # Importă biblioteca 'pandas' cu aliasul 'pd', folosită pentru manipularea și analiza datelor tabelare.
 import pandas_ta as ta # Importă 'pandas_ta' (Technical Analysis) cu aliasul 'ta' pentru calculul facil al indicatorilor financiari.
+import joblib  # Importă 'joblib', un utilitar pentru a salva și încărca modele și obiecte Python complexe (ex: scalere, modele ML).
 from sklearn.preprocessing import StandardScaler  # Importă clasa 'StandardScaler' din scikit-learn pentru a standardiza (scala) datele numerice.
 
 def run_features_pipeline(ticker: str, clean_dir: str, processed_dir: str, start_date: str, end_date: str):  # Definește funcția principală cu parametrii necesari (simbol, directoare intrare/ieșire, date de început/sfârșit).
@@ -97,12 +98,10 @@ def run_features_pipeline(ticker: str, clean_dir: str, processed_dir: str, start
 
         # 6. STANDARDIZARE (Scaling)
         # Nu scalăm coloanele 'Date' și 'Target_Direction'
-        feature_cols = [col for col in df.columns if col not in ['Date', 'Target_Direction']]  # Creează o listă cu toate coloanele numerice ce trebuie standardizate, excluzând data și target-ul.
-        scaler = StandardScaler()  # Instanțiază obiectul StandardScaler pentru a normaliza datele.
-        
-        df[feature_cols] = scaler.fit_transform(df[feature_cols])  # Aplică standardizarea pe coloanele selectate și suprascrie valorile vechi cu cele scalate.
-
-        print(f"  -> Scalare finalizată pentru {len(feature_cols)} indicatori.")  # Confirmă în consolă numărul de coloane care au fost scalate.
+        #feature_cols = [col for col in df.columns if col not in ['Date', 'Target_Direction']]  # Creează o listă cu toate coloanele numerice ce trebuie standardizate, excluzând data și target-ul.
+        #scaler = StandardScaler()  # Instanțiază obiectul StandardScaler pentru a normaliza datele.
+        #df[feature_cols] = scaler.fit_transform(df[feature_cols])  # Aplică standardizarea pe coloanele selectate și suprascrie valorile vechi cu cele scalate.
+        #print(f"  -> Scalare finalizată pentru {len(feature_cols)} indicatori.")  # Confirmă în consolă numărul de coloane care au fost scalate.
 
         # Salvarea fișierului final
         output_file_path = os.path.join(processed_dir, file_name)  # Construiește calea completă pentru fișierul de ieșire.

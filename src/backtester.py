@@ -11,7 +11,7 @@ import tensorflow as tf  # Importă 'tensorflow' sub aliasul 'tf', necesar pentr
 def run_backtester(  # Definește funcția principală care va simula performanța financiară a modelelor în timp.
     ticker: str,  # Parametru pentru simbolul acțiunii/activului financiar (ex: 'AAPL').
     clean_dir: str,  # Parametru ce indică folderul cu datele brute curățate (pentru a prelua prețurile reale).
-    processed_dir: str,  # Parametru ce indică folderul cu datele procesate (indicatorii tehnici scalați).
+    scaled_dir: str,  # Parametru ce indică folderul cu datele scalate (indicatorii tehnici).
     model_dir: str,  # Parametru pentru locația unde au fost salvate modelele antrenate anterior.
     start_date: str,  # Parametru pentru data de început a intervalului analizat.
     end_date: str,  # Parametru pentru data de final a intervalului analizat.
@@ -22,7 +22,7 @@ def run_backtester(  # Definește funcția principală care va simula performan�
     models = find_models(model_dir)  # Apelează o funcție ajutătoare (definită mai jos) pentru a găsi și încărca rutele tuturor modelelor salvate.
 
     features_file = os.path.join(  # Formează calea completă către fișierul cu feature-uri.
-        processed_dir,  # Folderul sursă pentru features.
+        scaled_dir,  # Folderul sursă pentru features.
         f"{ticker}_{start_date}_to_{end_date}.csv"  # Numele fișierului, construit dinamic din parametri.
     )
 
@@ -206,6 +206,10 @@ def find_models(base_models_dir):  # Definește sub-funcția ajutătoare, cea ca
         for file_path in glob.glob(pattern, recursive=True):  # Buclează prin modulele găsite de modulul Python Glob cu abilitate recursivă la activ.
             # Extragem numele fișierului fără extensie (ex: 'xgboost_SPY')
             file_name = os.path.basename(file_path)  # Folosește librăria os ca să separe pur și simplu ultimul nume de fișier din lanțul lung de adresă absolută.
+            
+            if file_name.startswith("scaler"):
+                continue
+
             model_name = os.path.splitext(file_name)[0]  # Fracționează numele propriu-zis de sufixul său de sistem de tip .joblib / .keras preluând doar bucata de index zero (fără punct).
 
             models_dict[model_name] = file_path  # Populează și inserează noile elemente descoperite creând un cheie-valoare legat solid cu path-ul respectiv.
